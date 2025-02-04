@@ -15,8 +15,8 @@ type Configuration struct {
 	provider Provider
 }
 
-func Load(filename string) error {
-	if err := godotenv.Load(filename); err != nil {
+func Load(filenames ...string) error {
+	if err := godotenv.Load(filenames...); err != nil {
 		return domain.NewErrorf(domain.ErrorCodeUnknown, "loading env var file")
 	}
 	return nil

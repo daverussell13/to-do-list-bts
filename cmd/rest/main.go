@@ -18,7 +18,7 @@ import (
 func main() {
 	e := echo.New()
 
-	if err := envvar.Load(""); err != nil {
+	if err := envvar.Load(); err != nil {
 		log.Fatalf("error loading .env file")
 	}
 
