@@ -25,15 +25,16 @@ func main() {
 	conf := envvar.New(nil)
 	pgPool, err := newPostgreSQL(conf)
 	if err != nil {
-		log.Fatalf("error loading .env file")
+		log.Fatalf("error connecting to database")
 	}
 
 	userRepo := postgresql.NewUser(pgPool)
 	authSvc := service.NewAuth(userRepo)
-
 	authHandler := rest.NewAuthHandler(authSvc)
 
-	e.POST("/login", authHandler.Login)
+	api := e.Group("/api")
+	api.POST("/login", authHandler.Login)
+	api.POST("/register", authHandler.Register)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }
@@ -44,7 +45,6 @@ func newPostgreSQL(conf *envvar.Configuration) (*pgxpool.Pool, error) {
 		if err != nil {
 			log.Fatalf("couldn't get configuration value for %s: %s", v, err)
 		}
-
 		return res
 	}
 
